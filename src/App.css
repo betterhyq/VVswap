@@ -212,7 +212,16 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
+  html, body {
     @apply bg-background text-foreground;
+    height: 100%;
+    overflow: hidden;
+    /* 禁用 Mac 上的双指滑动导航手势 */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  #root {
+    height: 100%;
+    overflow: hidden;
   }
 }
