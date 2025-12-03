@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "./App.css";
-import MenuBar from "./components/MenuBar";
 import Sidebar from "./components/Sidebar";
 import StatusBar from "./components/StatusBar";
 import ToolsPanel from "./components/panels/ToolsPanel";
@@ -36,7 +35,6 @@ function App() {
 
   return (
     <div className="app-container">
-      <MenuBar />
 
       <div className="main-container">
         <Sidebar activePanel={activePanel} onPanelChange={handlePanelChange} />

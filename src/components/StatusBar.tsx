@@ -1,7 +1,7 @@
 function StatusBar() {
   return (
     <div className="status-bar">
-      <span>就绪 | macOS 13.4 | x86_64</span>
+      <span>Made with ❤️ by <a href="https://github.com/betterhyq" target="_blank" rel="noopener noreferrer">betterhyq</a></span>
     </div>
   );
 }
