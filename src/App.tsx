@@ -33,8 +33,8 @@ function App() {
   };
 
   return (
-    <Layout>
-      Hello World
+    <Layout activePanel={activePanel} onPanelChange={handlePanelChange}>
+      {renderPanel()}
     </Layout>
   );
 }

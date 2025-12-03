@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings, ToolCase } from "lucide-react"
+import { Home, Inbox, ToolCase } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -10,22 +10,28 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { Panel } from "@/types"
+
+interface AppSidebarProps {
+  activePanel: Panel
+  onPanelChange: (panel: Panel) => void
+}
 
 // Menu items.
 const items = [
   {
     title: "Node",
-    url: "#",
+    panel: "nodejs" as Panel,
     icon: Home,
   },
   {
     title: "Python",
-    url: "#",
+    panel: "python" as Panel,
     icon: Inbox,
   }
 ]
 
-export function AppSidebar() {
+export function AppSidebar({ activePanel, onPanelChange }: AppSidebarProps) {
   return (
     <Sidebar>
       <SidebarHeader>
@@ -39,11 +45,12 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
                 <SidebarMenuItem key='tools'>
-                  <SidebarMenuButton asChild>
-                    <a href='#'>
-                      <ToolCase />
-                      <span>常用工具</span>
-                    </a>
+                  <SidebarMenuButton 
+                    onClick={() => onPanelChange("tools")}
+                    isActive={activePanel === "tools"}
+                  >
+                    <ToolCase />
+                    <span>常用工具</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
@@ -56,11 +63,12 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                  <SidebarMenuButton 
+                    onClick={() => onPanelChange(item.panel)}
+                    isActive={activePanel === item.panel}
+                  >
+                    <item.icon />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
