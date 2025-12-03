@@ -1,50 +1,51 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
+import MenuBar from "./components/MenuBar";
+import Sidebar from "./components/Sidebar";
+import StatusBar from "./components/StatusBar";
+import ToolsPanel from "./components/panels/ToolsPanel";
+import NodejsPanel from "./components/panels/NodejsPanel";
+import PythonPanel from "./components/panels/PythonPanel";
+import StatusPanel from "./components/panels/StatusPanel";
+import SettingsPanel from "./components/panels/SettingsPanel";
+import { Panel } from "./types";
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
+  const [activePanel, setActivePanel] = useState<Panel>("tools");
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    setGreetMsg(await invoke("greet", { name }));
-  }
+  const handlePanelChange = (panel: Panel) => {
+    setActivePanel(panel);
+  };
+
+  const renderPanel = () => {
+    switch (activePanel) {
+      case "tools":
+        return <ToolsPanel />;
+      case "nodejs":
+        return <NodejsPanel />;
+      case "python":
+        return <PythonPanel />;
+      case "status":
+        return <StatusPanel />;
+      case "settings":
+        return <SettingsPanel />;
+      default:
+        return <ToolsPanel />;
+    }
+  };
 
   return (
-    <main className="container">
-      <h1>Welcome to Tauri + React</h1>
+    <div className="app-container">
+      <MenuBar />
 
-      <div className="row">
-        <a href="https://vite.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="main-container">
+        <Sidebar activePanel={activePanel} onPanelChange={handlePanelChange} />
+
+        <div className="content-area">{renderPanel()}</div>
       </div>
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
 
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-      <p>{greetMsg}</p>
-    </main>
+      <StatusBar />
+    </div>
   );
 }
 

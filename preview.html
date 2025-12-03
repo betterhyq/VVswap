@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vswap - 多语言版本管理工具</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", "Arial", sans-serif;
+      }
+      body {
+        background-color: #f0f0f0;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+      }
+      /* 顶部菜单栏 */
+      .menu-bar {
+        background-color: #333;
+        color: white;
+        padding: 4px 10px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        -webkit-app-region: drag;
+      }
+      .menu-item {
+        padding: 4px 10px;
+        cursor: pointer;
+        -webkit-app-region: no-drag;
+      }
+      .menu-item:hover {
+        background-color: #555;
+      }
+      .window-controls {
+        margin-left: auto;
+        display: flex;
+      }
+      .window-control {
+        width: 30px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .window-control:hover {
+        background-color: #555;
+      }
+      .close-btn:hover {
+        background-color: #ff4444;
+      }
+
+      /* 主内容区 */
+      .main-container {
+        display: flex;
+        height: calc(100vh - 24px);
+      }
+
+      /* 左侧导航栏 */
+      .sidebar {
+        width: 200px;
+        background-color: #f5f5f5;
+        border-right: 1px solid #ddd;
+        padding: 15px 0;
+      }
+      .sidebar-item {
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+      }
+      .sidebar-item:hover {
+        background-color: #e8e8e8;
+      }
+      .sidebar-item.active {
+        background-color: #e1f5fe;
+        border-left: 3px solid #2196f3;
+        color: #2196f3;
+        font-weight: 500;
+      }
+      .sidebar-item i {
+        margin-right: 8px;
+      }
+
+      /* 右侧内容区 */
+      .content-area {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background-color: white;
+      }
+
+      /* 内容面板 - 默认隐藏 */
+      .content-panel {
+        display: none;
+      }
+      .content-panel.active {
+        display: block;
+      }
+
+      /* 通用组件样式 */
+      .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #333;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #eee;
+      }
+
+      /* 工具管理样式 */
+      .tool-card {
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        padding: 15px;
+        margin-bottom: 15px;
+        border: 1px solid #eee;
+      }
+      .tool-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .tool-name {
+        font-weight: 600;
+        font-size: 15px;
+      }
+      .tool-status {
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+      }
+      .status-installed {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+      }
+      .status-uninstalled {
+        background-color: #ffebee;
+        color: #c62828;
+      }
+      .tool-desc {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 10px;
+      }
+      .tool-actions {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .btn {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        margin-left: 5px;
+      }
+      .btn-primary {
+        background-color: #2196f3;
+        color: white;
+      }
+      .btn-success {
+        background-color: #4caf50;
+        color: white;
+      }
+      .btn-secondary {
+        background-color: #9e9e9e;
+        color: white;
+      }
+      .btn-info {
+        background-color: #00bcd4;
+        color: white;
+      }
+
+      /* 版本管理样式 */
+      .version-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+      }
+      .current-version {
+        background-color: #e3f2fd;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 14px;
+        color: #1565c0;
+      }
+      .version-search {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+      .version-list {
+        margin-bottom: 20px;
+      }
+      .version-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 14px;
+      }
+      .version-label {
+        font-weight: 500;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      /* 系统状态样式 */
+      .status-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      .status-card {
+        background-color: #f9f9f9;
+        border-radius: 4px;
+        padding: 15px;
+        border: 1px solid #eee;
+      }
+      .status-value {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 10px 0;
+        color: #333;
+      }
+      .status-desc {
+        font-size: 13px;
+        color: #666;
+      }
+
+      /* 设置页面样式 */
+      .settings-group {
+        margin-bottom: 20px;
+      }
+      .settings-label {
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .settings-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      .settings-select {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-bottom: 10px;
+      }
+      .settings-checkbox {
+        margin-right: 8px;
+      }
+
+      /* 底部状态栏 */
+      .status-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 24px;
+        background-color: #f5f5f5;
+        border-top: 1px solid #ddd;
+        padding: 0 10px;
+        font-size: 12px;
+        color: #666;
+        display: flex;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 顶部菜单栏 -->
+    <div class="menu-bar">
+      <div class="menu-item">文件</div>
+      <div class="menu-item">编辑</div>
+      <div class="menu-item">查看</div>
+      <div class="menu-item">帮助</div>
+      <div class="window-controls">
+        <div class="window-control">-</div>
+        <div class="window-control">□</div>
+        <div class="window-control close-btn">×</div>
+      </div>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="main-container">
+      <!-- 左侧导航栏 -->
+      <div class="sidebar">
+        <div class="sidebar-item active" data-panel="tools">
+          <i>⚙️</i> 工具管理
+        </div>
+        <div class="sidebar-item" data-panel="nodejs">
+          <i>🔄</i> Node.js 版本
+        </div>
+        <div class="sidebar-item" data-panel="python">
+          <i>🐍</i> Python 版本
+        </div>
+        <div class="sidebar-item" data-panel="status"><i>📊</i> 系统状态</div>
+        <div class="sidebar-item" data-panel="settings"><i>⚙️</i> 设置</div>
+      </div>
+
+      <!-- 右侧内容区 -->
+      <div class="content-area">
+        <!-- 工具管理面板 -->
+        <div id="tools" class="content-panel active">
+          <div class="section-title">工具管理</div>
+
+          <!-- nvm 工具卡片 -->
+          <div class="tool-card">
+            <div class="tool-header">
+              <div class="tool-name">nvm (Node.js 版本管理)</div>
+              <div class="tool-status status-installed">已安装</div>
+            </div>
+            <div class="tool-desc">
+              Node Version Manager - 用于管理多个 Node.js 版本的工具
+            </div>
+            <div class="tool-actions">
+              <button class="btn btn-success">更新</button>
+              <button class="btn btn-secondary">卸载</button>
+            </div>
+          </div>
+
+          <!-- pyenv 工具卡片 -->
+          <div class="tool-card">
+            <div class="tool-header">
+              <div class="tool-name">pyenv (Python 版本管理)</div>
+              <div class="tool-status status-uninstalled">未安装</div>
+            </div>
+            <div class="tool-desc">
+              Python Version Management - 用于管理多个 Python 版本的工具
+            </div>
+            <div class="tool-actions">
+              <button class="btn btn-primary">安装</button>
+            </div>
+          </div>
+
+          <!-- 其他工具卡片 -->
+          <div class="tool-card">
+            <div class="tool-header">
+              <div class="tool-name">jEnv (Java 版本管理)</div>
+              <div class="tool-status status-uninstalled">未安装</div>
+            </div>
+            <div class="tool-desc">
+              Java Environment Manager - 用于管理多个 Java 版本的工具
+            </div>
+            <div class="tool-actions">
+              <button class="btn btn-primary">安装</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node.js 版本管理面板 -->
+        <div id="nodejs" class="content-panel">
+          <div class="section-title">Node.js 版本管理</div>
+
+          <div class="version-header">
+            <div class="current-version">当前版本: v18.17.0</div>
+            <button class="btn btn-info">刷新列表</button>
+          </div>
+
+          <div class="version-list">
+            <span class="version-label">已安装版本</span>
+            <div class="version-item">
+              <span>v18.17.0 (当前)</span>
+              <button class="btn btn-secondary" disabled>当前版本</button>
+            </div>
+            <div class="version-item">
+              <span>v16.20.2</span>
+              <button class="btn btn-primary">切换</button>
+            </div>
+            <div class="version-item">
+              <span>v14.21.3</span>
+              <button class="btn btn-primary">切换</button>
+            </div>
+          </div>
+
+          <div class="version-list">
+            <span class="version-label">可安装版本</span>
+            <input
+              type="text"
+              class="version-search"
+              placeholder="搜索版本号..."
+            />
+            <div class="version-item">
+              <span>v20.5.1 (最新稳定版)</span>
+              <button class="btn btn-success">安装</button>
+            </div>
+            <div class="version-item">
+              <span>v19.9.0</span>
+              <button class="btn btn-success">安装</button>
+            </div>
+            <div class="version-item">
+              <span>v17.9.1</span>
+              <button class="btn btn-success">安装</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Python 版本管理面板 -->
+        <div id="python" class="content-panel">
+          <div class="section-title">Python 版本管理</div>
+
+          <div class="version-header">
+            <div
+              class="current-version"
+              style="background-color: #ffebee; color: #c62828"
+            >
+              请先安装 pyenv 工具
+            </div>
+            <button class="btn btn-info">刷新列表</button>
+          </div>
+
+          <div style="text-align: center; padding: 30px 0; color: #666">
+            <p>安装 pyenv 后即可管理 Python 版本</p>
+            <button class="btn btn-primary" style="margin-top: 15px">
+              安装 pyenv
+            </button>
+          </div>
+        </div>
+
+        <!-- 系统状态面板 -->
+        <div id="status" class="content-panel">
+          <div class="section-title">系统状态</div>
+
+          <div class="status-grid">
+            <div class="status-card">
+              <div class="status-name">操作系统</div>
+              <div class="status-value">macOS 13.4</div>
+              <div class="status-desc">Darwin Kernel Version 22.5.0</div>
+            </div>
+            <div class="status-card">
+              <div class="status-name">架构</div>
+              <div class="status-value">x86_64</div>
+              <div class="status-desc">64位处理器</div>
+            </div>
+            <div class="status-card">
+              <div class="status-name">当前 Node.js</div>
+              <div class="status-value">v18.17.0</div>
+              <div class="status-desc">通过 nvm 管理</div>
+            </div>
+            <div class="status-card">
+              <div class="status-name">当前 Python</div>
+              <div class="status-value">2.7.18</div>
+              <div class="status-desc">系统默认版本</div>
+            </div>
+          </div>
+
+          <div class="section-title" style="margin-top: 20px">已安装工具</div>
+          <div class="status-grid">
+            <div class="status-card">
+              <div class="status-name">nvm</div>
+              <div class="status-value">0.39.3</div>
+              <div class="status-desc">Node.js 版本管理</div>
+            </div>
+            <div class="status-card">
+              <div class="status-name">npm</div>
+              <div class="status-value">9.6.7</div>
+              <div class="status-desc">Node 包管理器</div>
+            </div>
+            <div class="status-card">
+              <div class="status-name">yarn</div>
+              <div class="status-value">1.22.19</div>
+              <div class="status-desc">替代 npm 的包管理器</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 设置面板 -->
+        <div id="settings" class="content-panel">
+          <div class="section-title">设置</div>
+
+          <div class="settings-group">
+            <label class="settings-label">默认 Node.js 版本</label>
+            <select class="settings-select">
+              <option>v18.17.0 (当前)</option>
+              <option>v16.20.2</option>
+              <option>v14.21.3</option>
+            </select>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label">自动更新</label>
+            <input type="checkbox" class="settings-checkbox" checked />
+            <span>启用工具自动更新检查</span>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label">下载镜像源</label>
+            <select class="settings-select">
+              <option>默认源</option>
+              <option>淘宝镜像 (cnpmjs.org)</option>
+              <option>华为镜像 (mirrors.huaweicloud.com)</option>
+              <option>阿里云镜像 (mirrors.aliyun.com)</option>
+            </select>
+          </div>
+
+          <div class="settings-group">
+            <label class="settings-label">日志文件位置</label>
+            <input
+              type="text"
+              class="settings-input"
+              value="/Users/yourname/.vswap/logs"
+            />
+          </div>
+
+          <div
+            style="display: flex; justify-content: flex-end; margin-top: 20px"
+          >
+            <button class="btn btn-secondary" style="margin-right: 10px">
+              取消
+            </button>
+            <button class="btn btn-primary">保存设置</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部状态栏 -->
+    <div class="status-bar">
+      <span>就绪 | macOS 13.4 | x86_64</span>
+    </div>
+
+    <script>
+      // 侧边栏切换功能
+      const sidebarItems = document.querySelectorAll(".sidebar-item");
+      const contentPanels = document.querySelectorAll(".content-panel");
+
+      sidebarItems.forEach((item) => {
+        item.addEventListener("click", function () {
+          // 移除所有侧边栏项的active类
+          sidebarItems.forEach((i) => i.classList.remove("active"));
+          // 为当前点击的项添加active类
+          this.classList.add("active");
+
+          // 获取目标面板ID
+          const targetPanel = this.getAttribute("data-panel");
+
+          // 隐藏所有内容面板
+          contentPanels.forEach((panel) => {
+            panel.classList.remove("active");
+          });
+
+          // 显示目标面板
+          document.getElementById(targetPanel).classList.add("active");
+        });
+      });
+
+      // 模拟菜单点击效果
+      const menuItems = document.querySelectorAll(".menu-item");
+      menuItems.forEach((item) => {
+        item.addEventListener("click", function () {
+          menuItems.forEach((i) => i.classList.remove("active"));
+          this.classList.add("active");
+        });
+      });
+    </script>
+  </body>
+</html>
