@@ -22,23 +22,40 @@ interface Version {
 function NodejsPanel() {
   const [installedVersions, setInstalledVersions] = useState<Version[]>([]);
   const [loading, setLoading] = useState(true);
+  const [switching, setSwitching] = useState<string | null>(null);
+
+  const fetchVersions = async () => {
+    try {
+      setLoading(true);
+      const versions = await invoke<Version[]>("get_nvm_versions");
+      setInstalledVersions(versions);
+    } catch (error) {
+      console.error("获取 nvm 版本失败:", error);
+      setInstalledVersions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchVersions = async () => {
-      try {
-        setLoading(true);
-        const versions = await invoke<Version[]>("get_nvm_versions");
-        setInstalledVersions(versions);
-      } catch (error) {
-        console.error("获取 nvm 版本失败:", error);
-        setInstalledVersions([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchVersions();
   }, []);
+
+  const handleSwitchVersion = async (version: string) => {
+    if (switching) return; // 防止重复点击
+    
+    try {
+      setSwitching(version);
+      await invoke("switch_node_version", { version });
+      // 切换成功后刷新版本列表
+      await fetchVersions();
+    } catch (error) {
+      console.error("切换版本失败:", error);
+      alert(`切换版本失败: ${error}`);
+    } finally {
+      setSwitching(null);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -65,7 +82,16 @@ function NodejsPanel() {
                     <TableRow key={version.version}>
                       <TableCell className="font-medium">{version.version}</TableCell>
                       <TableCell className="text-right">
-                        <Button>{version.isCurrent ? "当前版本" : "切换"}</Button>
+                        <Button
+                          onClick={() => handleSwitchVersion(version.version)}
+                          disabled={version.isCurrent || switching === version.version}
+                        >
+                          {switching === version.version
+                            ? "切换中..."
+                            : version.isCurrent
+                            ? "当前版本"
+                            : "切换"}
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}

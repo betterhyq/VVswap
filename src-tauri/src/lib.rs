@@ -193,11 +193,62 @@ mod version_compare {
     }
 }
 
+#[tauri::command]
+fn switch_node_version(version: String) -> Result<(), String> {
+    // 获取用户主目录
+    let home_dir = dirs::home_dir()
+        .ok_or("无法获取用户主目录")?;
+    
+    // 验证版本号格式
+    if !version.starts_with('v') {
+        return Err("版本号格式错误，应以 'v' 开头".to_string());
+    }
+    
+    // 检查版本是否存在
+    let version_dir = home_dir.join(".nvm").join("versions").join("node").join(&version);
+    if !version_dir.exists() {
+        return Err(format!("版本 {} 不存在", version));
+    }
+    
+    // 方法1: 直接写入 default 别名文件（更可靠）
+    let alias_dir = home_dir.join(".nvm").join("alias");
+    if !alias_dir.exists() {
+        fs::create_dir_all(&alias_dir)
+            .map_err(|e| format!("创建别名目录失败: {}", e))?;
+    }
+    
+    let default_alias = alias_dir.join("default");
+    fs::write(&default_alias, &version)
+        .map_err(|e| format!("写入默认别名失败: {}", e))?;
+    
+    // 方法2: 尝试通过 shell 执行 nvm 命令（确保环境变量也更新）
+    // 获取 shell 路径
+    let shell = std::env::var("SHELL").unwrap_or_else(|_| "/bin/bash".to_string());
+    let nvm_script = home_dir.join(".nvm").join("nvm.sh");
+    
+    if nvm_script.exists() {
+        // 构建命令：source nvm.sh && nvm alias default <version>
+        let command = format!(
+            "source {} && nvm alias default {}",
+            nvm_script.to_string_lossy(),
+            version
+        );
+        
+        // 执行命令（即使失败也不影响，因为我们已经直接写入了文件）
+        let _ = Command::new(&shell)
+            .arg("-c")
+            .arg(&command)
+            .output();
+    }
+    
+    Ok(())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, get_nvm_versions])
+        .invoke_handler(tauri::generate_handler![greet, get_nvm_versions, switch_node_version])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
