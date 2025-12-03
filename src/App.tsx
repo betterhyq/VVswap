@@ -3,8 +3,6 @@ import "./App.css";
 import ToolsPanel from "./components/panels/ToolsPanel";
 import NodejsPanel from "./components/panels/NodejsPanel";
 import PythonPanel from "./components/panels/PythonPanel";
-import StatusPanel from "./components/panels/StatusPanel";
-import SettingsPanel from "./components/panels/SettingsPanel";
 import Layout from "./layout";
 
 function App() {
@@ -15,8 +13,6 @@ function App() {
         <Route path="tools" element={<ToolsPanel />} />
         <Route path="nodejs" element={<NodejsPanel />} />
         <Route path="python" element={<PythonPanel />} />
-        <Route path="status" element={<StatusPanel />} />
-        <Route path="settings" element={<SettingsPanel />} />
       </Route>
     </Routes>
   );

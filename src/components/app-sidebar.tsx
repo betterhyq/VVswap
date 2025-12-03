@@ -32,9 +32,10 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarHeader>
-        <h5 className="text-ms font-semibold tracking-tight">
-          The JD VVswap
-        </h5>
+        <h4 className="text-2xl font-semibold tracking-tight">
+          VVswap
+        </h4>
+        <h5>可视化多语言版本管理</h5>
       </SidebarHeader>
       <SidebarContent>
         {/* 常用工具 */}

@@ -1,3 +1,10 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
 interface Version {
   version: string;
   isCurrent?: boolean;
@@ -17,45 +24,57 @@ const availableVersions: Version[] = [
 
 function NodejsPanel() {
   return (
-    <div className="content-panel active">
-      <div className="section-title">Node.js 版本管理</div>
-
-      <div className="version-header">
-        <div className="current-version">当前版本: v18.17.0</div>
-        <button className="btn btn-info">刷新列表</button>
-      </div>
-
-      <div className="version-list">
-        <span className="version-label">已安装版本</span>
-        {installedVersions.map((v, index) => (
-          <div key={index} className="version-item">
-            <span>
-              {v.version} {v.isCurrent && "(当前)"}
-            </span>
-            <button
-              className="btn btn-secondary"
-              disabled={v.isCurrent}
-            >
-              {v.isCurrent ? "当前版本" : "切换"}
-            </button>
-          </div>
-        ))}
-      </div>
-
-      <div className="version-list">
-        <span className="version-label">可安装版本</span>
-        <input
-          type="text"
-          className="version-search"
-          placeholder="搜索版本号..."
-        />
-        {availableVersions.map((v, index) => (
-          <div key={index} className="version-item">
-            <span>{v.version}</span>
-            <button className="btn btn-success">安装</button>
-          </div>
-        ))}
-      </div>
+    <div className="w-full">
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full"
+        defaultValue="item-1"
+      >
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Product Information</AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-4 text-balance">
+            <p>
+              Our flagship product combines cutting-edge technology with sleek
+              design. Built with premium materials, it offers unparalleled
+              performance and reliability.
+            </p>
+            <p>
+              Key features include advanced processing capabilities, and an
+              intuitive user interface designed for both beginners and experts.
+            </p>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-2">
+          <AccordionTrigger>Shipping Details</AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-4 text-balance">
+            <p>
+              We offer worldwide shipping through trusted courier partners.
+              Standard delivery takes 3-5 business days, while express shipping
+              ensures delivery within 1-2 business days.
+            </p>
+            <p>
+              All orders are carefully packaged and fully insured. Track your
+              shipment in real-time through our dedicated tracking portal.
+            </p>
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value="item-3">
+          <AccordionTrigger>Return Policy</AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-4 text-balance">
+            <p>
+              We stand behind our products with a comprehensive 30-day return
+              policy. If you&apos;re not completely satisfied, simply return the
+              item in its original condition.
+            </p>
+            <p>
+              Our hassle-free return process includes free return shipping and
+              full refunds processed within 48 hours of receiving the returned
+              item.
+            </p>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 }
