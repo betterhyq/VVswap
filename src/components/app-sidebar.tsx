@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom"
-import { Home, ToolCase } from "lucide-react"
+import { ToolCase, Code2 } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -15,9 +15,9 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Node",
+    title: "Node.js",
     path: "/nodejs",
-    icon: Home,
+    icon: Code2,
   }
 ]
 
@@ -26,15 +26,20 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
-        <h4 className="text-2xl font-semibold tracking-tight">
-          VVswap
-        </h4>
-        <h5>可视化多语言版本管理</h5>
+      <SidebarHeader className="border-b border-sidebar-border">
+        <div className="flex flex-col gap-1">
+          <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            VVswap
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            可视化多语言版本管理
+          </p>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         {/* 常用工具 */}
         <SidebarGroup>
+          <SidebarGroupLabel>常用工具</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
                 <SidebarMenuItem key='tools'>
@@ -43,8 +48,8 @@ export function AppSidebar() {
                     isActive={location.pathname === "/tools"}
                   >
                     <NavLink to="/tools">
-                      <ToolCase />
-                      <span>常用工具</span>
+                      <ToolCase className="h-4 w-4" />
+                      <span>工具管理</span>
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -63,7 +68,7 @@ export function AppSidebar() {
                     isActive={location.pathname === item.path}
                   >
                     <NavLink to={item.path}>
-                      <item.icon />
+                      <item.icon className="h-4 w-4" />
                       <span>{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
