@@ -2,9 +2,10 @@
  * Node.js 版本管理模块
  * 提供获取和切换 Node.js 版本的功能
  */
-use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::{PathBuf};
+use std::process::Command;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -35,21 +36,42 @@ fn get_nvm_alias_dir() -> Result<PathBuf, String> {
     get_nvm_root().map(|root| root.join("alias"))
 }
 
-/// 获取当前 Node.js 版本（从 default alias 文件读取）
+/// 获取当前 Node.js 版本（通过执行 nvm current 命令）
 fn get_current_node_version() -> Option<String> {
-    let alias_dir = get_nvm_alias_dir().ok()?;
-    let default_alias = alias_dir.join("default");
+    let nvm_root = get_nvm_root().ok()?;
+    let nvm_script = nvm_root.join("nvm.sh");
     
-    fs::read_to_string(&default_alias)
-        .ok()
-        .and_then(|content| {
-            let trimmed = content.trim();
-            if is_valid_version_format(trimmed) {
-                Some(trimmed.to_string())
-            } else {
-                None
-            }
-        })
+    // 如果 nvm.sh 不存在，返回 None
+    if !nvm_script.exists() {
+        return None;
+    }
+    
+    // 构建 shell 命令：source nvm.sh 然后执行 nvm current
+    let nvm_path = nvm_script.to_str()?;
+    let shell_command = format!("source {} && nvm current", nvm_path);
+    
+    // 执行命令
+    let output = Command::new("zsh")
+        .arg("-c")
+        .arg(&shell_command)
+        .output()
+        .ok()?;
+    
+    // 检查命令是否成功执行
+    if !output.status.success() {
+        return None;
+    }
+    
+    // 解析输出
+    let version = String::from_utf8(output.stdout).ok()?;
+    let trimmed = version.trim();
+    
+    // 验证版本格式并返回
+    if is_valid_version_format(trimmed) {
+        Some(trimmed.to_string())
+    } else {
+        None
+    }
 }
 
 /// 解析版本号用于排序（提取数字部分）
