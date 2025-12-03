@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
 import { Code2, CheckCircle2, Loader2, RefreshCw } from "lucide-react";
 import {
   Table,
@@ -13,21 +12,18 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-
-interface Version {
-  version: string;
-  isCurrent: boolean;
-}
+import { getNvmVersions, switchNodeVersion } from "@/bridge"
+import type { NodeVersion } from "@/bridge/types"
 
 function NodejsPanel() {
-  const [installedVersions, setInstalledVersions] = useState<Version[]>([]);
+  const [installedVersions, setInstalledVersions] = useState<NodeVersion[]>([]);
   const [loading, setLoading] = useState(true);
   const [switching, setSwitching] = useState<string | null>(null);
 
   const fetchVersions = async () => {
     try {
       setLoading(true);
-      const versions = await invoke<Version[]>("get_nvm_versions");
+      const versions = await getNvmVersions();
       setInstalledVersions(versions);
     } catch (error) {
       console.error("获取 nvm 版本失败:", error);
@@ -46,7 +42,7 @@ function NodejsPanel() {
     
     try {
       setSwitching(version);
-      await invoke("switch_node_version", { version });
+      await switchNodeVersion(version);
       // 切换成功后刷新版本列表
       await fetchVersions();
     } catch (error) {
