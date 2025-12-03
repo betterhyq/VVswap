@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom"
-import { Home, Inbox, ToolCase } from "lucide-react"
+import { Home, ToolCase } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
