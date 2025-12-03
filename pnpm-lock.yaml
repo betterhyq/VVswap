@@ -17,12 +17,24 @@ importers:
       '@tauri-apps/plugin-opener':
         specifier: ^2
         version: 2.4.0
+      class-variance-authority:
+        specifier: ^0.7.1
+        version: 0.7.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      lucide-react:
+        specifier: ^0.555.0
+        version: 0.555.0(react@19.2.0)
       react:
         specifier: ^19.1.0
         version: 19.2.0
       react-dom:
         specifier: ^19.1.0
         version: 19.2.0(react@19.2.0)
+      tailwind-merge:
+        specifier: ^3.4.0
+        version: 3.4.0
       tailwindcss:
         specifier: ^4.1.17
         version: 4.1.17
@@ -30,6 +42,9 @@ importers:
       '@tauri-apps/cli':
         specifier: ^2
         version: 2.9.4
+      '@types/node':
+        specifier: ^24.10.1
+        version: 24.10.1
       '@types/react':
         specifier: ^19.1.8
         version: 19.2.7
@@ -39,6 +54,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.6.0
         version: 4.7.0(vite@7.2.6(@types/node@24.10.1)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass-embedded@1.93.3)(sass@1.94.2)(stylus@0.64.0)(sugarss@5.0.1(postcss@8.5.6))(terser@5.44.1)(tsx@4.21.0)(yaml@2.8.2))
+      tw-animate-css:
+        specifier: ^1.4.0
+        version: 1.4.0
       typescript:
         specifier: ~5.8.3
         version: 5.8.3
@@ -541,6 +559,13 @@ packages:
     resolution: {integrity: sha1-e+N6TAPJruHs/oYqSiOyxwwgXTA=, tarball: http://registry.m.jd.com/chokidar/download/chokidar-4.0.3.tgz}
     engines: {node: '>= 14.16.0'}
 
+  class-variance-authority@0.7.1:
+    resolution: {integrity: sha1-QAinmKDkVTp4GlesUXfJ+10EN4c=, tarball: http://registry.m.jd.com/class-variance-authority/download/class-variance-authority-0.7.1.tgz}
+
+  clsx@2.1.1:
+    resolution: {integrity: sha1-7tOXyf2L2IK/sY3qtxAgSaLzKZk=, tarball: http://registry.m.jd.com/clsx/download/clsx-2.1.1.tgz}
+    engines: {node: '>=6'}
+
   color-convert@2.0.1:
     resolution: {integrity: sha1-ctOmjVmMm9s68q0ehPIdiWq9TeM=, tarball: http://registry.m.jd.com/color-convert/download/color-convert-2.0.1.tgz}
     engines: {node: '>=7.0.0'}
@@ -770,6 +795,11 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha1-HaJ+ZxAnGUdpXa9oSOhH8B2EuSA=, tarball: http://registry.m.jd.com/lru-cache/download/lru-cache-5.1.1.tgz}
+
+  lucide-react@0.555.0:
+    resolution: {integrity: sha1-jbQyK3hODRSkFdZ+4OjKIZoXFMo=, tarball: http://registry.m.jd.com/lucide-react/download/lucide-react-0.555.0.tgz}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   magic-string@0.30.21:
     resolution: {integrity: sha1-VnY+wJoPqAkd8nh5/ZTRkHjADZE=, tarball: http://registry.m.jd.com/magic-string/download/magic-string-0.30.21.tgz}
@@ -1047,6 +1077,9 @@ packages:
     resolution: {integrity: sha1-YFXFZe6MgdL57lqufbdX5tkIjAw=, tarball: http://registry.m.jd.com/sync-message-port/download/sync-message-port-1.1.3.tgz}
     engines: {node: '>=16.0.0'}
 
+  tailwind-merge@3.4.0:
+    resolution: {integrity: sha1-WiZOExoJaHmWXxF10R+MNua2Tso=, tarball: http://registry.m.jd.com/tailwind-merge/download/tailwind-merge-3.4.0.tgz}
+
   tailwindcss@4.1.17:
     resolution: {integrity: sha1-5ty3qcYM73UiFptfIH/+wv1lIoY=, tarball: http://registry.m.jd.com/tailwindcss/download/tailwindcss-4.1.17.tgz}
 
@@ -1074,6 +1107,9 @@ packages:
     resolution: {integrity: sha1-Mqps8XSB4zb3Vhleb+BNrj5jCLE=, tarball: http://registry.m.jd.com/tsx/download/tsx-4.21.0.tgz}
     engines: {node: '>=18.0.0'}
     hasBin: true
+
+  tw-animate-css@1.4.0:
+    resolution: {integrity: sha1-tKBvaCRMujlCiqR+ZebkwLq8Ie4=, tarball: http://registry.m.jd.com/tw-animate-css/download/tw-animate-css-1.4.0.tgz}
 
   typescript@5.8.3:
     resolution: {integrity: sha1-kvij5ePPSXNW9BeMNM1lp/XoRA4=, tarball: http://registry.m.jd.com/typescript/download/typescript-5.8.3.tgz}
@@ -1608,7 +1644,6 @@ snapshots:
   '@types/node@24.10.1':
     dependencies:
       undici-types: 7.16.0
-    optional: true
 
   '@types/react-dom@19.2.3(@types/react@19.2.7)':
     dependencies:
@@ -1682,6 +1717,12 @@ snapshots:
     dependencies:
       readdirp: 4.1.2
     optional: true
+
+  class-variance-authority@0.7.1:
+    dependencies:
+      clsx: 2.1.1
+
+  clsx@2.1.1: {}
 
   color-convert@2.0.1:
     dependencies:
@@ -1939,6 +1980,10 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  lucide-react@0.555.0(react@19.2.0):
+    dependencies:
+      react: 19.2.0
 
   magic-string@0.30.21:
     dependencies:
@@ -2262,6 +2307,8 @@ snapshots:
   sync-message-port@1.1.3:
     optional: true
 
+  tailwind-merge@3.4.0: {}
+
   tailwindcss@4.1.17: {}
 
   tapable@2.3.0: {}
@@ -2295,10 +2342,11 @@ snapshots:
       fsevents: 2.3.3
     optional: true
 
+  tw-animate-css@1.4.0: {}
+
   typescript@5.8.3: {}
 
-  undici-types@7.16.0:
-    optional: true
+  undici-types@7.16.0: {}
 
   update-browserslist-db@1.1.4(browserslist@4.28.0):
     dependencies:
