@@ -18,11 +18,6 @@ const items = [
     title: "Node",
     path: "/nodejs",
     icon: Home,
-  },
-  {
-    title: "Python",
-    path: "/python",
-    icon: Inbox,
   }
 ]
 
