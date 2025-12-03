@@ -10,7 +10,7 @@ export default function Layout() {
         <div className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="-ml-1" />
         </div>
-        <div className="flex-1 space-y-4 p-6 pt-0 overflow-y-auto">
+        <div className="flex-1 space-y-4 p-6 pt-0 overflow-y-auto scrollbar-hide">
           <Outlet />
         </div>
       </main>
