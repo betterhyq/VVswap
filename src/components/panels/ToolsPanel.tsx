@@ -1,4 +1,4 @@
-import { Package, Download, Trash2, RefreshCw } from "lucide-react"
+import { Download, Trash2, RefreshCw } from "lucide-react"
 import {
   Card,
   CardDescription,
@@ -36,44 +36,39 @@ const tools: Tool[] = [
 
 function ToolCard({ tool }: { tool: Tool }) {
   return (
-    <Card className="transition-all hover:shadow-md">
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-              <Package className="h-5 w-5" />
-            </div>
-            <div>
-              <CardTitle className="text-lg">{tool.name}</CardTitle>
-              <CardDescription className="mt-1">
-                {tool.description}
-              </CardDescription>
-            </div>
+    <Card className="transition-all hover:shadow-md flex flex-col">
+      <CardHeader className="flex-1">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-2 mb-1">
+            <CardTitle className="text-lg leading-tight break-words">{tool.name}</CardTitle>
+            <Badge
+              variant={tool.status === "installed" ? "default" : "outline"}
+              className="shrink-0"
+            >
+              {tool.status === "installed" ? "已安装" : "未安装"}
+            </Badge>
           </div>
-          <Badge
-            variant={tool.status === "installed" ? "default" : "outline"}
-            className="shrink-0"
-          >
-            {tool.status === "installed" ? "已安装" : "未安装"}
-          </Badge>
+          <CardDescription className="text-sm leading-relaxed break-words">
+            {tool.description}
+          </CardDescription>
         </div>
       </CardHeader>
-      <CardFooter className="flex gap-2">
+      <CardFooter className="flex gap-2 mt-auto">
         {tool.status === "installed" ? (
           <>
-            <Button variant="outline" size="sm" className="flex-1">
-              <RefreshCw className="mr-2 h-4 w-4" />
-              更新
+            <Button variant="outline" size="sm" className="flex-1 min-w-0">
+              <RefreshCw className="mr-2 h-4 w-4 shrink-0" />
+              <span className="truncate">更新</span>
             </Button>
-            <Button variant="outline" size="sm" className="flex-1">
-              <Trash2 className="mr-2 h-4 w-4" />
-              卸载
+            <Button variant="outline" size="sm" className="flex-1 min-w-0">
+              <Trash2 className="mr-2 h-4 w-4 shrink-0" />
+              <span className="truncate">卸载</span>
             </Button>
           </>
         ) : (
-          <Button className="flex-1">
-            <Download className="mr-2 h-4 w-4" />
-            安装
+          <Button className="flex-1 w-full">
+            <Download className="mr-2 h-4 w-4 shrink-0" />
+            <span className="truncate">安装</span>
           </Button>
         )}
       </CardFooter>
@@ -90,7 +85,7 @@ function ToolsPanel() {
           管理和安装各种开发环境版本管理工具
         </p>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {tools.map((tool, index) => (
           <ToolCard key={index} tool={tool} />
         ))}
