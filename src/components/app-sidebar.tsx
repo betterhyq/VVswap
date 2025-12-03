@@ -1,11 +1,11 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-
+import { Calendar, Home, Inbox, Search, Settings, ToolCase } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -14,38 +14,44 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Home",
+    title: "Node",
     url: "#",
     icon: Home,
   },
   {
-    title: "Inbox",
+    title: "Python",
     url: "#",
     icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
+  }
 ]
 
 export function AppSidebar() {
   return (
     <Sidebar>
+      <SidebarHeader>
+        <h5 className="text-ms font-semibold tracking-tight">
+          The JD VVswap
+        </h5>
+      </SidebarHeader>
       <SidebarContent>
+        {/* 常用工具 */}
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+                <SidebarMenuItem key='tools'>
+                  <SidebarMenuButton asChild>
+                    <a href='#'>
+                      <ToolCase />
+                      <span>常用工具</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        {/* 语言版本管理 */}
+        <SidebarGroup>
+          <SidebarGroupLabel>语言版本管理</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
