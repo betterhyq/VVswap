@@ -1,13 +1,12 @@
 import { useState } from "react";
 import "./App.css";
-import Sidebar from "./components/Sidebar";
-import StatusBar from "./components/StatusBar";
 import ToolsPanel from "./components/panels/ToolsPanel";
 import NodejsPanel from "./components/panels/NodejsPanel";
 import PythonPanel from "./components/panels/PythonPanel";
 import StatusPanel from "./components/panels/StatusPanel";
 import SettingsPanel from "./components/panels/SettingsPanel";
 import { Panel } from "./types";
+import Layout from "./layout";
 
 function App() {
   const [activePanel, setActivePanel] = useState<Panel>("tools");
@@ -34,16 +33,9 @@ function App() {
   };
 
   return (
-    <div className="app-container">
-
-      <div className="main-container">
-        <Sidebar activePanel={activePanel} onPanelChange={handlePanelChange} />
-
-        <div className="content-area">{renderPanel()}</div>
-      </div>
-
-      <StatusBar />
-    </div>
+    <Layout>
+      Hello World
+    </Layout>
   );
 }
 
