@@ -1,41 +1,24 @@
-import { useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import ToolsPanel from "./components/panels/ToolsPanel";
 import NodejsPanel from "./components/panels/NodejsPanel";
 import PythonPanel from "./components/panels/PythonPanel";
 import StatusPanel from "./components/panels/StatusPanel";
 import SettingsPanel from "./components/panels/SettingsPanel";
-import { Panel } from "./types";
 import Layout from "./layout";
 
 function App() {
-  const [activePanel, setActivePanel] = useState<Panel>("tools");
-
-  const handlePanelChange = (panel: Panel) => {
-    setActivePanel(panel);
-  };
-
-  const renderPanel = () => {
-    switch (activePanel) {
-      case "tools":
-        return <ToolsPanel />;
-      case "nodejs":
-        return <NodejsPanel />;
-      case "python":
-        return <PythonPanel />;
-      case "status":
-        return <StatusPanel />;
-      case "settings":
-        return <SettingsPanel />;
-      default:
-        return <ToolsPanel />;
-    }
-  };
-
   return (
-    <Layout activePanel={activePanel} onPanelChange={handlePanelChange}>
-      {renderPanel()}
-    </Layout>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Navigate to="/tools" replace />} />
+        <Route path="tools" element={<ToolsPanel />} />
+        <Route path="nodejs" element={<NodejsPanel />} />
+        <Route path="python" element={<PythonPanel />} />
+        <Route path="status" element={<StatusPanel />} />
+        <Route path="settings" element={<SettingsPanel />} />
+      </Route>
+    </Routes>
   );
 }
 

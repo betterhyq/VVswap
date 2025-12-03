@@ -1,3 +1,4 @@
+import { NavLink, useLocation } from "react-router-dom"
 import { Home, Inbox, ToolCase } from "lucide-react"
 import {
   Sidebar,
@@ -10,28 +11,24 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { Panel } from "@/types"
-
-interface AppSidebarProps {
-  activePanel: Panel
-  onPanelChange: (panel: Panel) => void
-}
 
 // Menu items.
 const items = [
   {
     title: "Node",
-    panel: "nodejs" as Panel,
+    path: "/nodejs",
     icon: Home,
   },
   {
     title: "Python",
-    panel: "python" as Panel,
+    path: "/python",
     icon: Inbox,
   }
 ]
 
-export function AppSidebar({ activePanel, onPanelChange }: AppSidebarProps) {
+export function AppSidebar() {
+  const location = useLocation()
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -46,11 +43,13 @@ export function AppSidebar({ activePanel, onPanelChange }: AppSidebarProps) {
             <SidebarMenu>
                 <SidebarMenuItem key='tools'>
                   <SidebarMenuButton 
-                    onClick={() => onPanelChange("tools")}
-                    isActive={activePanel === "tools"}
+                    asChild
+                    isActive={location.pathname === "/tools"}
                   >
-                    <ToolCase />
-                    <span>常用工具</span>
+                    <NavLink to="/tools">
+                      <ToolCase />
+                      <span>常用工具</span>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
@@ -64,11 +63,13 @@ export function AppSidebar({ activePanel, onPanelChange }: AppSidebarProps) {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton 
-                    onClick={() => onPanelChange(item.panel)}
-                    isActive={activePanel === item.panel}
+                    asChild
+                    isActive={location.pathname === item.path}
                   >
-                    <item.icon />
-                    <span>{item.title}</span>
+                    <NavLink to={item.path}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

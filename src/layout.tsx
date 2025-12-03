@@ -1,20 +1,14 @@
+import { Outlet } from "react-router-dom"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
-import { Panel } from "@/types"
 
-interface LayoutProps {
-  children: React.ReactNode
-  activePanel: Panel
-  onPanelChange: (panel: Panel) => void
-}
-
-export default function Layout({ children, activePanel, onPanelChange }: LayoutProps) {
+export default function Layout() {
   return (
     <SidebarProvider>
-      <AppSidebar activePanel={activePanel} onPanelChange={onPanelChange} />
+      <AppSidebar />
       <main>
         <SidebarTrigger />
-        {children}
+        <Outlet />
       </main>
     </SidebarProvider>
   )
