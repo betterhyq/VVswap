@@ -1,5 +1,8 @@
 import { NavLink, useLocation } from "react-router-dom"
-import { ToolCase, Code2 } from "lucide-react"
+import { 
+  // ToolCase, 
+  Code2 
+} from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -38,7 +41,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         {/* 常用工具 */}
-        <SidebarGroup>
+        {/* <SidebarGroup>
           <SidebarGroupLabel>常用工具</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -55,7 +58,7 @@ export function AppSidebar() {
                 </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
-        </SidebarGroup>
+        </SidebarGroup> */}
         {/* 语言版本管理 */}
         <SidebarGroup>
           <SidebarGroupLabel>语言版本管理</SidebarGroupLabel>

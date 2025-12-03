@@ -8,7 +8,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<Navigate to="/tools" replace />} />
+        <Route index element={<Navigate to="/nodejs" replace />} />
         <Route path="tools" element={<ToolsPanel />} />
         <Route path="nodejs" element={<NodejsPanel />} />
       </Route>
